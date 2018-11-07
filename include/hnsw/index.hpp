@@ -110,6 +110,10 @@ private:
     >;
 
 public:
+    hnsw_index() {}
+
+    hnsw_index(std::uint_fast32_t random_seed) : random(random_seed) {}
+
     void insert(const key_t &key, const vector_t &vector) {
         insert(key, vector_t(vector));
     }
