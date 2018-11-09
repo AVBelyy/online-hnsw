@@ -15,6 +15,10 @@
 
 #pragma once
 
+#include <vector>
+
+#include "sparse_vector.hpp"
+
 #include "dot_product_avx.hpp"
 #include "dot_product_sse2.hpp"
 
@@ -28,6 +32,27 @@ T dot_product(const T *one, const T *another, std::size_t size) {
 
     for (std::size_t i = 0; i < size; ++i) {
         sum += one[i] * another[i];
+    }
+
+    return sum;
+}
+
+template<class T>
+T sparse_dot_product(const sparse_elem<T> *one, const sparse_elem<T> *another,
+                     std::size_t one_size, std::size_t another_size) {
+    T sum = 0;
+
+    size_t i = 0, j = 0;
+    while (i < one_size && j < another_size) {
+        if (one->idx < another->idx) {
+            i++; one++;
+        } else if (one->idx > another->idx) {
+            j++; another++;
+        } else {
+            sum += one->value * another->value;
+            i++; one++;
+            j++; another++;
+        }
     }
 
     return sum;

@@ -8,7 +8,7 @@ pyhnsw_index::pyhnsw_index(std::uint_fast32_t random_seed, size_t max_links, siz
     hnsw_index.options = options;
 }
 
-void pyhnsw_index::insert(const py_key_t &key, const std::vector<py_elem_t> &vector) { // TODO: vector&&?
+void pyhnsw_index::insert(const py_key_t &key, const py_vector_t &vector) { // TODO: vector&&?
     hnsw_index.insert(key, vector);
 }
 
@@ -16,7 +16,7 @@ void pyhnsw_index::remove(const py_key_t &key) {
     hnsw_index.remove(key);
 }
 
-std::vector<py_key_t> pyhnsw_index::search(const std::vector<py_elem_t> &target, size_t nn, size_t ef) const {
+std::vector<py_key_t> pyhnsw_index::search(const py_vector_t &target, size_t nn, size_t ef) const {
     std::vector<py_key_t> result;
 
     auto hnsw_result = hnsw_index.search(target, nn, ef);

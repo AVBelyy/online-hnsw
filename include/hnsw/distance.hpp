@@ -19,6 +19,8 @@
 #include "detail/dot_product.hpp"
 #include "detail/l2_dist.hpp"
 
+#include "detail/sparse_vector.hpp"
+
 #include <algorithm>
 #include <cmath>
 #include <stdexcept>
@@ -66,6 +68,18 @@ struct dot_product_distance_t {
         using result_type = decltype(*one.data());
 
         result_type product = detail::dot_product(one.data(), another.data(), one.size());
+
+        return std::max(result_type(0), result_type(result_type(1.0) - product));
+    }
+};
+
+
+struct sparse_dot_product_distance_t {
+    template<class SparseVector>
+    auto operator()(const SparseVector &one, const SparseVector &another) const {
+        using result_type = decltype(one.data()->value);
+
+        result_type product = detail::sparse_dot_product(one.data(), another.data(), one.size(), another.size());
 
         return std::max(result_type(0), result_type(result_type(1.0) - product));
     }
